@@ -1,5 +1,7 @@
-﻿Namespace GetSearchLocationAdditionalInfo
-    Partial Public Class Form1
+Namespace GetSearchLocationAdditionalInfo
+
+    Partial Class Form1
+
         ''' <summary>
         ''' Required designer variable.
         ''' </summary>
@@ -10,14 +12,14 @@
         ''' </summary>
         ''' <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-            If disposing AndAlso (components IsNot Nothing) Then
-                components.Dispose()
+            If disposing AndAlso (Me.components IsNot Nothing) Then
+                Me.components.Dispose()
             End If
+
             MyBase.Dispose(disposing)
         End Sub
 
-        #Region "Windows Form Designer generated code"
-
+#Region "Windows Form Designer generated code"
         ''' <summary>
         ''' Required method for Designer support - do not modify
         ''' the contents of this method with the code editor.
@@ -28,10 +30,10 @@
             Me.tbResults = New System.Windows.Forms.RichTextBox()
             Me.panelControl2 = New DevExpress.XtraEditors.PanelControl()
             Me.search = New System.Windows.Forms.Button()
-            CType(Me.panelControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType((Me.panelControl1), System.ComponentModel.ISupportInitialize).BeginInit()
             Me.panelControl1.SuspendLayout()
             Me.panel1.SuspendLayout()
-            CType(Me.panelControl2, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType((Me.panelControl2), System.ComponentModel.ISupportInitialize).BeginInit()
             Me.panelControl2.SuspendLayout()
             Me.SuspendLayout()
             ' 
@@ -59,7 +61,7 @@
             Me.tbResults.Dock = System.Windows.Forms.DockStyle.Fill
             Me.tbResults.Location = New System.Drawing.Point(0, 0)
             Me.tbResults.Name = "tbResults"
-            Me.tbResults.ReadOnly = True
+            Me.tbResults.[ReadOnly] = True
             Me.tbResults.Size = New System.Drawing.Size(334, 411)
             Me.tbResults.TabIndex = 15
             Me.tbResults.Text = ""
@@ -81,6 +83,7 @@
             Me.search.TabIndex = 10
             Me.search.Text = "Search"
             Me.search.UseVisualStyleBackColor = True
+            AddHandler Me.search.Click, New System.EventHandler(AddressOf Me.search_Click)
             ' 
             ' Form1
             ' 
@@ -90,22 +93,24 @@
             Me.Controls.Add(Me.panelControl1)
             Me.Name = "Form1"
             Me.Text = "Form1"
-            CType(Me.panelControl1, System.ComponentModel.ISupportInitialize).EndInit()
+            AddHandler Me.Load, New System.EventHandler(AddressOf Me.Form1_Load)
+            CType((Me.panelControl1), System.ComponentModel.ISupportInitialize).EndInit()
             Me.panelControl1.ResumeLayout(False)
             Me.panel1.ResumeLayout(False)
-            CType(Me.panelControl2, System.ComponentModel.ISupportInitialize).EndInit()
+            CType((Me.panelControl2), System.ComponentModel.ISupportInitialize).EndInit()
             Me.panelControl2.ResumeLayout(False)
             Me.ResumeLayout(False)
-
         End Sub
 
-        #End Region
-
+#End Region
         Private panelControl1 As DevExpress.XtraEditors.PanelControl
+
         Private panel1 As System.Windows.Forms.Panel
+
         Private panelControl2 As DevExpress.XtraEditors.PanelControl
-        Private WithEvents search As System.Windows.Forms.Button
+
+        Private search As System.Windows.Forms.Button
+
         Private tbResults As System.Windows.Forms.RichTextBox
     End Class
 End Namespace
-
