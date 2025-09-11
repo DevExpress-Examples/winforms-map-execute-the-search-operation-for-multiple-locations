@@ -83,7 +83,7 @@ Namespace GetSearchLocationAdditionalInfo
             Me.search.TabIndex = 10
             Me.search.Text = "Search"
             Me.search.UseVisualStyleBackColor = True
-            AddHandler Me.search.Click, New System.EventHandler(AddressOf Me.search_Click)
+            Me.search.Click += New System.EventHandler(AddressOf Me.search_Click)
             ' 
             ' Form1
             ' 
@@ -93,7 +93,7 @@ Namespace GetSearchLocationAdditionalInfo
             Me.Controls.Add(Me.panelControl1)
             Me.Name = "Form1"
             Me.Text = "Form1"
-            AddHandler Me.Load, New System.EventHandler(AddressOf Me.Form1_Load)
+            Me.Load += New System.EventHandler(AddressOf Me.Form1_Load)
             CType((Me.panelControl1), System.ComponentModel.ISupportInitialize).EndInit()
             Me.panelControl1.ResumeLayout(False)
             Me.panel1.ResumeLayout(False)
