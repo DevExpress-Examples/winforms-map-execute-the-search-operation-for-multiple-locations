@@ -21,12 +21,12 @@ Namespace GetSearchLocationAdditionalInfo
 
         Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs)
             PrepareMap()
-            AddHandler searchProvider.SearchCompleted, New BingSearchCompletedEventHandler(AddressOf searchDataProvider_SearchCompleted)
+            searchProvider.SearchCompleted += New BingSearchCompletedEventHandler(AddressOf searchDataProvider_SearchCompleted)
         End Sub
 
         Private Sub search_Click(ByVal sender As Object, ByVal e As EventArgs)
             idx = 0
-            asyncResult = BeginInvoke(CType(AddressOf SearchAsync, DoSearch))
+            asyncResult = Me.BeginInvoke(CType(AddressOf SearchAsync, DoSearch))
         End Sub
 
         Friend Delegate Sub DoSearch()
@@ -38,24 +38,24 @@ Namespace GetSearchLocationAdditionalInfo
         Private addresses As List(Of String) = New List(Of String) From {"505 N. Brand Blvd, Glendale CA 91203, USA", "1111 N Brand Blvd, Glendale, CA 91202, USA", "300 N Brand Blvd, Glendale, CA 91203, USA"}
 
         Private Sub SearchAsync()
-            EndInvoke(asyncResult)
-            If idx < addresses.Count Then searchProvider.Search(addresses(Math.Min(Threading.Interlocked.Increment(idx), idx - 1)))
+            Me.EndInvoke(asyncResult)
+            If idx < addresses.Count Then searchProvider.Search(addresses(System.Math.Min(System.Threading.Interlocked.Increment(idx), idx - 1)))
         End Sub
 
         Private Sub searchDataProvider_SearchCompleted(ByVal sender As Object, ByVal e As BingSearchCompletedEventArgs)
             Dim result As SearchRequestResult = e.RequestResult
-            If result.ResultCode = RequestResultCode.Success Then
+            If result.ResultCode Is RequestResultCode.Success Then
                 Dim regions As List(Of LocationInformation) = result.SearchResults
                 For Each region As LocationInformation In regions
                     AddPushpin(region.Location)
-                    If idx = addresses.Count Then map.ZoomToFitLayerItems()
+                    If idx Is addresses.Count Then map.ZoomToFitLayerItems()
                 Next
 
                 DisplayResults(e.RequestResult)
-                asyncResult = BeginInvoke(CType(AddressOf SearchAsync, DoSearch))
+                asyncResult = Me.BeginInvoke(CType(AddressOf SearchAsync, DoSearch))
             End If
 
-            If result.ResultCode = RequestResultCode.BadRequest Then tbResults.Text += "The Bing Search service does not work for this location."
+            If result.ResultCode Is RequestResultCode.BadRequest Then tbResults.Text += "The Bing Search service does not work for this location."
         End Sub
 
         Private Sub AddPushpin(ByVal geoPoint As GeoPoint)
@@ -72,13 +72,13 @@ Namespace GetSearchLocationAdditionalInfo
 
         Private Sub DisplayResults(ByVal requestResult As SearchRequestResult)
             Dim resultList As StringBuilder = New StringBuilder("")
-            If requestResult.ResultCode = RequestResultCode.Success Then
+            If requestResult.ResultCode Is RequestResultCode.Success Then
                 Dim resCounter As Integer = 1
                 For Each resultInfo As LocationInformation In requestResult.SearchResults
-                    resultList.Append(String.Format(Microsoft.VisualBasic.Constants.vbLf & " Result {0}:  " & Microsoft.VisualBasic.Constants.vbLf, resCounter))
-                    resultList.Append(String.Format(resultInfo.DisplayName & Microsoft.VisualBasic.Constants.vbLf))
-                    resultList.Append(String.Format("Geographical coordinates:  {0}", resultInfo.Location))
-                    resultList.Append(String.Format(Microsoft.VisualBasic.Constants.vbLf & "______________________________" & Microsoft.VisualBasic.Constants.vbLf))
+                    resultList.Append([String].Format(Global.Microsoft.VisualBasic.Constants.vbLf & " Result {0}:  " & Global.Microsoft.VisualBasic.Constants.vbLf, resCounter))
+                    resultList.Append([String].Format(resultInfo.DisplayName & Global.Microsoft.VisualBasic.Constants.vbLf))
+                    resultList.Append([String].Format("Geographical coordinates:  {0}", resultInfo.Location))
+                    resultList.Append([String].Format(Global.Microsoft.VisualBasic.Constants.vbLf & "______________________________" & Global.Microsoft.VisualBasic.Constants.vbLf))
                     resCounter += 1
                 Next
             End If
@@ -113,7 +113,7 @@ Namespace GetSearchLocationAdditionalInfo
             infoLayer.DataProvider = searchProvider
             searchProvider.GenerateLayerItems = False
             searchProvider.BingKey = yourBingKey
-            map.ShowSearchPanel = False
+            map.SearchPanelOptions.Visible = False
         End Sub
     End Class
 End Namespace
