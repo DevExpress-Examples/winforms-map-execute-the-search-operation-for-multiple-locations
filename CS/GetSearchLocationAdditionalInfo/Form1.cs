@@ -130,7 +130,7 @@ namespace GetSearchLocationAdditionalInfo {
             infoLayer.DataProvider = searchProvider;
             searchProvider.GenerateLayerItems = false;
             searchProvider.BingKey = yourBingKey;
-            map.ShowSearchPanel = false;
+            map.SearchPanelOptions.Visible = false;
         }
     }
 }
