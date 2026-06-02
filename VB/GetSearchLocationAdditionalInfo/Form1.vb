@@ -1,8 +1,10 @@
+Imports System.Text
+Imports System.Windows.Forms
 Imports DevExpress.XtraMap
 
 Namespace GetSearchLocationAdditionalInfo
 
-    Public Partial Class Form1
+    Partial Public Class Form1
         Inherits Form
 
         Const yourAzureKey As String = "Your Azure key here."
@@ -17,23 +19,24 @@ Namespace GetSearchLocationAdditionalInfo
 
         Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs)
             PrepareMap()
-            Me.searchProvider.SearchCompleted += AddressOf SearchProvider_SearchCompleted
+
+            AddHandler Me.searchProvider.SearchCompleted, AddressOf SearchProvider_SearchCompleted
         End Sub
 
         Private Sub SearchProvider_SearchCompleted(ByVal sender As Object, ByVal e As AzureSearchCompletedEventArgs)
             Dim result As SearchRequestResult = e.RequestResult
-            If result.ResultCode Is RequestResultCode.Success Then
+            If result.ResultCode = RequestResultCode.Success Then
                 Dim regions As List(Of LocationInformation) = result.SearchResults
                 For Each region As LocationInformation In regions
                     AddPushpin(region.Location)
-                    If idx Is addresses.Count Then map.ZoomToFitLayerItems()
+                    If idx = addresses.Count Then map.ZoomToFitLayerItems()
                 Next
 
                 DisplayResults(e.RequestResult)
                 asyncResult = Me.BeginInvoke(CType(AddressOf SearchAsync, DoSearch))
             End If
 
-            If result.ResultCode Is RequestResultCode.BadRequest Then tbResults.Text += "The Azure Search service does not work for this location."
+            If result.ResultCode = RequestResultCode.BadRequest Then tbResults.Text += "The Azure Search service does not work for this location."
         End Sub
 
         Private Sub search_Click(ByVal sender As Object, ByVal e As EventArgs)
@@ -62,8 +65,8 @@ Namespace GetSearchLocationAdditionalInfo
         End Sub
 
         Private Sub DisplayResults(ByVal requestResult As SearchRequestResult)
-            Dim resultList As StringBuilder = New StringBuilder("")
-            If requestResult.ResultCode Is RequestResultCode.Success Then
+            Dim resultList As New StringBuilder("")
+            If requestResult.ResultCode = RequestResultCode.Success Then
                 Dim resCounter As Integer = 1
                 For Each resultInfo As LocationInformation In requestResult.SearchResults
                     resultList.Append([String].Format(Microsoft.VisualBasic.Constants.vbLf & " Result {0}:  " & Microsoft.VisualBasic.Constants.vbLf, resCounter))
