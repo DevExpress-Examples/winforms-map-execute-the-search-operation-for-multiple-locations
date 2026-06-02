@@ -1,4 +1,5 @@
-Imports System
+Imports DevExpress.XtraEditors
+Imports System.Linq
 Imports System.Windows.Forms
 
 Namespace GetSearchLocationAdditionalInfo
@@ -10,9 +11,10 @@ Namespace GetSearchLocationAdditionalInfo
         ''' </summary>
         <STAThread>
         Sub Main()
-            Call Application.EnableVisualStyles()
+            Call WindowsFormsSettings.SetPerMonitorDpiAware()
+            Application.EnableVisualStyles()
             Application.SetCompatibleTextRenderingDefault(False)
-            Call Application.Run(New Form1())
+            Application.Run(New Form1())
         End Sub
     End Module
 End Namespace
