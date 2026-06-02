@@ -8,24 +8,35 @@ using DevExpress.XtraMap;
 namespace GetSearchLocationAdditionalInfo {
     public partial class Form1 : Form {
 
-        const string yourBingKey = "Your Bing Key";
+        const string yourAzureKey = "Your Azure key here.";
         MapControl map;
-        BingSearchDataProvider searchProvider;
-
+        AzureSearchDataProvider searchProvider;
         public Form1() {
             InitializeComponent();
         }
-
         private void Form1_Load(object sender, EventArgs e) {
             PrepareMap();
-            searchProvider.SearchCompleted +=
-                new BingSearchCompletedEventHandler(searchDataProvider_SearchCompleted);
+            searchProvider.SearchCompleted += SearchProvider_SearchCompleted;
+        }
+        private void SearchProvider_SearchCompleted(object sender, AzureSearchCompletedEventArgs e) {
+
+            SearchRequestResult result = e.RequestResult;
+            if (result.ResultCode == RequestResultCode.Success) {
+                List<LocationInformation> regions = result.SearchResults;
+                foreach (LocationInformation region in regions) {
+                    AddPushpin(region.Location);
+                    if (idx == addresses.Count)
+                        map.ZoomToFitLayerItems();
+                }
+                DisplayResults(e.RequestResult);
+                asyncResult = this.BeginInvoke((DoSearch)SearchAsync);
+            }
+
+            if (result.ResultCode == RequestResultCode.BadRequest)
+                tbResults.Text += "The Azure Search service does not work for this location.";
         }
 
-      
-
         private void search_Click(object sender, EventArgs e) {
-
             idx = 0;
             asyncResult = this.BeginInvoke((DoSearch)SearchAsync);
         }
@@ -33,47 +44,19 @@ namespace GetSearchLocationAdditionalInfo {
         delegate void DoSearch();
         IAsyncResult asyncResult;
         int idx = 0;
-        List<string> addresses = new List<string> {"505 N. Brand Blvd, Glendale CA 91203, USA", 
+        List<string> addresses = new List<string> {"505 N. Brand Blvd, Glendale CA 91203, USA",
             "1111 N Brand Blvd, Glendale, CA 91202, USA", "300 N Brand Blvd, Glendale, CA 91203, USA" };
-        void SearchAsync()
-        {
+        void SearchAsync() {
             this.EndInvoke(asyncResult);
             if (idx < addresses.Count)
-            searchProvider.Search(addresses[idx++]);
+                searchProvider.Search(addresses[idx++]);
         }
 
-        private void searchDataProvider_SearchCompleted(object sender, BingSearchCompletedEventArgs e) {
-            SearchRequestResult result = e.RequestResult;
-            if (result.ResultCode == RequestResultCode.Success) {
-                List<LocationInformation> regions = result.SearchResults;
-                foreach (LocationInformation region in regions) { 
-                    AddPushpin(region.Location);
-                    if (idx == addresses.Count)
-                        map.ZoomToFitLayerItems();
-                }
-
-                DisplayResults(e.RequestResult);
-                asyncResult = this.BeginInvoke((DoSearch)SearchAsync);
-            }
-
-            if (result.ResultCode == RequestResultCode.BadRequest)
-                tbResults.Text += "The Bing Search service does not work for this location.";
-
-        }
-
-        private void AddPushpin(GeoPoint geoPoint)
-        {
+        private void AddPushpin(GeoPoint geoPoint) {
             MapPushpin pin = new MapPushpin();
             pin.Location = geoPoint;
-
             VectorItemsLayer layer = (VectorItemsLayer)this.map.Layers[2];
-
             ((MapItemStorage)layer.Data).Items.Add(pin);
-        }
-
-        void NavigateTo(GeoPoint geoPoint) {
-            map.CenterPoint = geoPoint;
-            map.ZoomLevel = 15;
         }
 
         private void DisplayResults(SearchRequestResult requestResult) {
@@ -88,8 +71,6 @@ namespace GetSearchLocationAdditionalInfo {
                     resultList.Append(String.Format("\n______________________________\n"));
                     resCounter++;
                 }
-
-  
             }
             tbResults.Text += resultList.ToString();
         }
@@ -113,24 +94,24 @@ namespace GetSearchLocationAdditionalInfo {
 
             // Create an information layer and add it to the map.
             InformationLayer infoLayer = new InformationLayer();
-            
+
             map.Layers.Add(infoLayer);
 
             VectorItemsLayer items = new VectorItemsLayer();
             items.Data = new MapItemStorage();
             map.Layers.Add(items);
 
-            // Create a Bing data provider and specify the Bing key.
-            BingMapDataProvider bingProvider = new BingMapDataProvider();
-            tilesLayer.DataProvider = bingProvider;
-            bingProvider.BingKey = yourBingKey;
+            // Create an Azure data provider and specify the Azure key.
+            AzureMapDataProvider azureProvider = new AzureMapDataProvider();
+            tilesLayer.DataProvider = azureProvider;
+            azureProvider.Tileset = AzureTileset.BaseLabelsRoad | AzureTileset.Imagery;
+            azureProvider.AzureKey = yourAzureKey;
 
-            // Create a Bing search data provider and specify the Bing key.
-            searchProvider = new BingSearchDataProvider();
+            // Create an Azure search data provider and specify the Azure key.
+            searchProvider = new AzureSearchDataProvider { GenerateLayerItems = false, AzureKey = yourAzureKey };
             infoLayer.DataProvider = searchProvider;
-            searchProvider.GenerateLayerItems = false;
-            searchProvider.BingKey = yourBingKey;
-            map.ShowSearchPanel = false;
+            map.SearchPanelOptions.Visible = false;
+
         }
     }
 }

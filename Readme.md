@@ -7,7 +7,7 @@
 
 # WinForms Map - How to Execute the Search Operation for Multiple Locations
 
-Initially, the [Search](https://documentation.devexpress.com/windowsforms/16711/Controls-and-Libraries/Map-Control/GIS-Data/Search) operation is executed in an asynchronous manner and the next Search operation cannot be invoked while waiting for the result from the previous Search request. This example shows how to resolve this issue and include subsequent Search method calls into the [SearchCompleted](https://documentation.devexpress.com/WindowsForms/DevExpress.XtraMap.BingSearchDataProvider.SearchCompleted.event) event handler.
+Initially, the [Search](https://documentation.devexpress.com/windowsforms/16711/Controls-and-Libraries/Map-Control/GIS-Data/Search) operation is executed in an asynchronous manner and the next Search operation cannot be invoked while waiting for the result from the previous Search request. This example shows how to resolve this issue and include subsequent Search method calls into the [AzureSearchDataProvider.SearchCompleted](https://docs.devexpress.com/WindowsForms/DevExpress.XtraMap.AzureSearchDataProvider.SearchCompleted) event handler.
 
 ## Files to Review
 

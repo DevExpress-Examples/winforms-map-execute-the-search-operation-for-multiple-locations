@@ -1,4 +1,5 @@
 ﻿
+using DevExpress.XtraEditors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace GetSearchLocationAdditionalInfo {
         /// </summary>
         [STAThread]
         static void Main() {
+            WindowsFormsSettings.SetPerMonitorDpiAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
